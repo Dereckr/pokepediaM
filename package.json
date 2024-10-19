@@ -6,9 +6,9 @@
     "start": "parcel index.html",
     "build": "parcel build index.html"
   },
-  "author": "Brother Nelson <nelsoned@byui.edu>",
+  "author": "Dereck Romero",
   "dependencies": {
-    "parcel": "^2.8.3",
+    "parcel": "^2.12.0",
     "prettier": "^2.8.4"
   }
 }
