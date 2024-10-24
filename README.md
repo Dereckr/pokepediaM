@@ -1,2 +1,2 @@
-# my-cool-project
+# Pokepedia
 WDD330 final project
