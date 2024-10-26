@@ -17,25 +17,53 @@ export function createElement(type, props = {}, children = []) {
   return element;
 }
 
-async function getPokemon() {
-  const url = "https://pokeapi.co/api/v2/pokemon/";
+export function getInput() {
+  const input = document.getElementById("pokeName").value;
+  const nameButton = document.getElementById("nameButton");
+  const searchResult = document.getElementById("searchResult");
+}
 
-  const response = await fetch(url);
-  //check to see if the fetch was successful
-  if (response.ok) {
-    // the API will send us JSON...but we have to convert the response before we can use it
-    // .json() also returns a promise...so we await it as well.
-    const data = await response.json();
-    doStuff(data);
+export async function getPokemon(input) {
+  const url = `https://pokeapi.co/api/v2/pokemon/${input}`;
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      let data = await response.json();
+      console.log(data);
+
+      const pokeimg = createElement("img", {
+        src: `${data.sprites.front_default}`,
+        alt: "Pokemon image",
+      });
+
+      const name = createElement("h3", { textContent: data.species.name });
+      const elementTypes = createElement("p", {
+        textContent: `Types: ${data.types
+          .map((type) => type.type.name)
+          .join(", ")}`,
+      });
+      const addPokemon = createElement("button", {
+        textContent: "Add Pokemon",
+      });
+      addPokemon.addEventListener("click", () => {
+        localStorage.setItem("team", JSON.stringify(data));
+      });
+
+      const pokemon = createElement("div", {});
+      pokemon.appendChild(name);
+      pokemon.appendChild(elementTypes);
+      pokemon.appendChild(pokeimg);
+      pokemon.appendChild(addPokemon);
+      console.log(pokemon);
+
+      // const a = createElement("div", { textContent: "test" });
+      document.querySelector("#searchResult").appendChild(pokemon);
+
+      // return createElement("div", {}, [pokemon]);
+    }
+  } catch (error) {
+    console.error(error);
+    searchResult.textContent =
+      "There is no Pokemon with that name in our Database";
   }
 }
-function doStuff(data) {
-  let results = null;
-  results = data;
-  results.results.forEach((pokemon) => {
-    const div = document.createElement("div");
-    div.textContent = pokemon.name;
-    document.querySelector("main").appendChild(div);
-  });
-}
-getPokemon();

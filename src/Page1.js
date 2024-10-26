@@ -1,4 +1,9 @@
-import { createElement } from "./utils";
+import getInput, {
+  createElement,
+  getPokemon,
+  getValue,
+  getInput,
+} from "./utils";
 
 function Page1() {
   const title = createElement("h2", { textContent: "Search" });
@@ -9,6 +14,8 @@ function Page1() {
 
   const input1 = createElement("input", {
     name: "pokeName",
+    type: "text",
+    id: "pokeName",
     textContent: "or",
   });
   const label2 = createElement("label", {
@@ -17,17 +24,26 @@ function Page1() {
   });
   const input2 = createElement("input", { name: "pokeNumber" });
   const searchButtonName = createElement("button", {
-    type: "submit",
-    value: "submit",
-    className: "searchButton",
+    className: "searchButton nameButton ",
     textContent: "Search by Name",
   });
+
+  searchButtonName.addEventListener("click", () => {
+    const input = document.getElementById("pokeName").value;
+    const nameButton = document.getElementById("nameButton");
+    const searchResult = document.getElementById("searchResult");
+    getPokemon(input);
+  
+  });
+
   const searchButtonNumber = createElement("button", {
     type: "submit",
     value: "submit",
-    className: "searchButton",
+    className: "searchButton numberButton",
     textContent: "Search by Number",
   });
+
+  const searchResult = createElement("div", { id: "searchResult" });
 
   // const page3Link = createElement("a", {
   //   href: "/#/page3",
@@ -43,6 +59,7 @@ function Page1() {
     input2,
     searchButtonName,
     searchButtonNumber,
+    searchResult,
   ]);
 }
 
