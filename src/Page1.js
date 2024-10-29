@@ -3,6 +3,7 @@ import getInput, {
   getPokemon,
   getValue,
   getInput,
+  getLocalStorage,
 } from "./utils";
 
 function Page1() {
@@ -18,11 +19,7 @@ function Page1() {
     id: "pokeName",
     textContent: "or",
   });
-  const label2 = createElement("label", {
-    textContent: "Pokemon Number: ",
-    className: "label2",
-  });
-  const input2 = createElement("input", { name: "pokeNumber" });
+
   const searchButtonName = createElement("button", {
     className: "searchButton nameButton ",
     textContent: "Search by Name",
@@ -30,36 +27,41 @@ function Page1() {
 
   searchButtonName.addEventListener("click", () => {
     const input = document.getElementById("pokeName").value;
-    const nameButton = document.getElementById("nameButton");
-    const searchResult = document.getElementById("searchResult");
-    getPokemon(input);
-  
-  });
 
-  const searchButtonNumber = createElement("button", {
-    type: "submit",
-    value: "submit",
-    className: "searchButton numberButton",
-    textContent: "Search by Number",
+    getPokemon(input);
   });
 
   const searchResult = createElement("div", { id: "searchResult" });
 
-  // const page3Link = createElement("a", {
-  //   href: "/#/page3",
-  //   textContent: "Link to Page 3",
-  // });
+  const team = getLocalStorage("team");
+  const pokemonDiv = createElement("div", { className: "pokemonDiv" });
+
+  team.forEach((pokemon) => {
+    const pokeimg = createElement("img", {
+      src: `${pokemon.sprites.front_default}`,
+      alt: "Pokemon image",
+    });
+
+    const name = createElement("h3", { textContent: pokemon.species.name });
+    const elementTypes = createElement("p", {
+      textContent: `Types: ${pokemon.types
+        .map((type) => type.type.name)
+        .join(", ")}`,
+    });
+
+    pokemonDiv.appendChild(name);
+    pokemonDiv.appendChild(elementTypes);
+    pokemonDiv.appendChild(pokeimg);
+  });
 
   return createElement("div", {}, [
     title,
     // page3Link,
     label1,
     input1,
-    label2,
-    input2,
     searchButtonName,
-    searchButtonNumber,
     searchResult,
+    pokemonDiv,
   ]);
 }
 

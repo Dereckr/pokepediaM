@@ -17,6 +17,21 @@ export function createElement(type, props = {}, children = []) {
   return element;
 }
 
+export function getLocalStorage(key) {
+  if (!localStorage.getItem(key)) {
+    const empty = [];
+    localStorage.setItem(key, JSON.stringify(empty));
+  }
+  return JSON.parse(localStorage.getItem(key));
+}
+
+export function setLocalStorage(key, data) {
+  let formerTeam = getLocalStorage(key);
+  formerTeam.push(data);
+
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
 export function getInput() {
   const input = document.getElementById("pokeName").value;
   const nameButton = document.getElementById("nameButton");
@@ -29,7 +44,6 @@ export async function getPokemon(input) {
     const response = await fetch(url);
     if (response.ok) {
       let data = await response.json();
-      console.log(data);
 
       const pokeimg = createElement("img", {
         src: `${data.sprites.front_default}`,
@@ -42,24 +56,34 @@ export async function getPokemon(input) {
           .map((type) => type.type.name)
           .join(", ")}`,
       });
+
+      const statusDiv = createElement("div", {});
+
+      data.stats.forEach((stat) => {
+        const status = createElement("p", {
+          textContent: `${stat.stat.name} Base Value: ${stat.base_stat} `,
+        });
+        statusDiv.appendChild(status);
+      });
+
       const addPokemon = createElement("button", {
         textContent: "Add Pokemon",
       });
+
       addPokemon.addEventListener("click", () => {
-        localStorage.setItem("team", JSON.stringify(data));
+        const formerTeam = getLocalStorage("team");
+        formerTeam.push(data);
+        localStorage.setItem("team", JSON.stringify(formerTeam));
       });
 
       const pokemon = createElement("div", {});
       pokemon.appendChild(name);
       pokemon.appendChild(elementTypes);
       pokemon.appendChild(pokeimg);
+      pokemon.appendChild(statusDiv);
       pokemon.appendChild(addPokemon);
-      console.log(pokemon);
 
-      // const a = createElement("div", { textContent: "test" });
       document.querySelector("#searchResult").appendChild(pokemon);
-
-      // return createElement("div", {}, [pokemon]);
     }
   } catch (error) {
     console.error(error);

@@ -1,4 +1,4 @@
-import { createElement } from "./utils";
+import { createElement, getLocalStorage } from "./utils";
 import { initRouter } from "./router";
 
 function Header(mainDiv) {
