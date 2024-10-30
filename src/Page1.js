@@ -40,6 +40,7 @@ function Page1() {
     const pokeimg = createElement("img", {
       src: `${pokemon.sprites.front_default}`,
       alt: "Pokemon image",
+      className: "pokeImg",
     });
 
     const name = createElement("h3", { textContent: pokemon.species.name });
@@ -49,9 +50,12 @@ function Page1() {
         .join(", ")}`,
     });
 
-    pokemonDiv.appendChild(name);
-    pokemonDiv.appendChild(elementTypes);
-    pokemonDiv.appendChild(pokeimg);
+    const onePokemon = createElement("div", {});
+
+    onePokemon.appendChild(name);
+    onePokemon.appendChild(elementTypes);
+    onePokemon.appendChild(pokeimg);
+    pokemonDiv.appendChild(onePokemon);
   });
 
   return createElement("div", {}, [
